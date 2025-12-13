@@ -6,28 +6,24 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
     const max = 151;
     const id = Math.floor(Math.random() * (max - min + 1)) + 1;
 
-    // Fetch Pokémon et species
     const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
     const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
 
     const pokemonJson = await pokemonRes.json();
     const speciesJson = await speciesRes.json();
 
-    // Nom français
     const fr = speciesJson.names.find(
       (n: { name: string; language: { name: string } }) => n.language.name === "fr"
     )?.name;
 
     const taucap = speciesJson.capture_rate;
 
-    // Types anglais
     const types = pokemonJson.types.map(
       (t: { type: { name: string } }) => t.type.name
     );
 
-    // Types français via Promise.all
     const typesFr = await Promise.all(
-      types.map(async (typeName) => {
+      types.map(async (typeName:string) => {
         const res = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
         const json = await res.json();
         return json.names.find(
@@ -36,7 +32,6 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
       })
     );
 
-    // Détermination du shiny
     const isShiny = Math.floor(Math.random() * 512) === 0;
 
     const image = isShiny
@@ -45,11 +40,9 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
 
     const song = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
 
-    console.log("Taux capture :", taucap);
-    console.log("ID :", id);
-    console.log("Types FR :", typesFr);
+  
 
-    // Retour
+
     return [
       {
         id,
