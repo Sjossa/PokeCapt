@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { fetchPokemons } from "./Hook/useFetch";
+import useCapture from "./Logique/Capture";
 import type PokemonType from "./types/pokemonType";
 
 export default function App() {
   const [pokemons, setPokemons] = useState<PokemonType[]>([]);
 
   const loadPokemons = async () => {
-    const data = await fetchPokemons(1);
+    const data = await fetchPokemons();
     setPokemons(data);
   };
 
+  const { count, capture } = useCapture(loadPokemons);
+
   useEffect(() => {
-    const run = async () => {
+    const fetchData = async () => {
       await loadPokemons();
     };
-    run();
+
+    fetchData();
   }, []);
 
   return (
@@ -24,13 +28,16 @@ export default function App() {
           <p>{p.nameFr}</p>
           <img src={p.image} alt={p.nameFr} />
           <audio autoPlay src={p.song} />
+
+           <button onClick={() => capture(p.taucap)}>Reload Pokémon</button>
+
         </div>
+
       ))}
 
 
 
-
-      {/* <button onClick={loadPokemons}>Reload Pokémon</button> */}
+      <p>Compteur : {count}</p>
     </div>
   );
 }

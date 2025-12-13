@@ -1,8 +1,11 @@
+
+
 export default interface fetchPokemonType {
   id: number;
   nameFr: string;
-  image: string;
-   language: { name: string };
-  name: string;
-  song : string
+  language: { name: string };
+
+  image: string; // sprite ou shiny
+  song: string; // lien vers le cri
+  taucap: number; // capture rate
 }
