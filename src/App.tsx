@@ -26,6 +26,7 @@ export default function App() {
       {pokemons.map((p) => (
         <div key={p.id}>
           <p>{p.nameFr}</p>
+          <p>{p.type}</p>
           <img src={p.image} alt={p.nameFr} />
           <audio autoPlay src={p.song} />
 

@@ -4,4 +4,5 @@ export default interface PokemonType {
   image: string;
   song : string
   taucap : number
+  type : string
 }
