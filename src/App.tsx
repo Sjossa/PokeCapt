@@ -8,68 +8,72 @@ export default function App() {
   const [equipes, setEquipes] = useState<string[]>(() =>
     JSON.parse(localStorage.getItem("Equipe") || "[]")
   );
+
   const loadPokemons = async () => {
     const data = await fetchPokemons();
     setPokemons(data);
   };
 
-  const { count, capture, message, setMessage } = useCapture(
-    loadPokemons,
-    setEquipes
-  );
+  const { count, capture, message } = useCapture(loadPokemons, setEquipes);
 
   useEffect(() => {
     const fetchData = async () => {
       await loadPokemons();
     };
-
     fetchData();
   }, []);
 
   return (
-    <div>
+    <div className="game">
       {pokemons.map((p) => (
         <div key={p.id}>
-          <p>{p.nameFr}</p>
-          <p>{p.type}</p>
-          <img src={p.image} alt={p.nameFr} />
-          <audio autoPlay src={p.song} />
+          {/* Infos du Pokémon */}
+          <div className="info">
+            <p>{p.nameFr}</p>
+            <p>{Array.isArray(p.type) ? p.type.join(" / ") : p.type}</p>
+          </div>
 
-          <button
-            onClick={() => {
-              capture(p.taucap, p.nameFr);
-            }}
-          >
-            lancer une pokebal
-          </button>
+          {/* Image et musique du Pokémon */}
+          <div className="pokemon">
+            <img src={p.image} alt={p.nameFr} />
+            <audio autoPlay src={p.song} />
+          </div>
+
+          {/* Équipe */}
+          <ul className="equipes">
+            {equipes.map((e, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  const newEquipe = equipes.filter((poke) => poke !== e);
+                  localStorage.setItem("Equipe", JSON.stringify(newEquipe));
+                  setEquipes(newEquipe);
+                }}
+              >
+                {e}
+              </li>
+            ))}
+          </ul>
+
+          {/* Dresseur et actions */}
+          <div className="dresseur">
+            <img src={p.trainer} alt="" />
+            <button
+              disabled={equipes.length >= 6}
+              onClick={() => capture(p.taucap, p.nameFr)}
+            >
+              Lancer une Pokéball
+            </button>
+            <button onClick={loadPokemons}>Fuir</button>
+
+            <p>
+              {equipes.length >= 6
+                ? "L'équipe est pleine. Supprimez un Pokémon avant de capturer."
+                : message}
+            </p>
+          </div>
         </div>
       ))}
-      <p className="choix">{message}</p>
-
-      <ul className="aaa">
-        {equipes.map((e: string, index: number) => (
-          <li
-            key={index}
-            onClick={() => {
-              if (message) {
-                const savedEquipe = localStorage.getItem("Equipe");
-                if (!savedEquipe) return;
-                let equipe = JSON.parse(savedEquipe) as string[];
-                equipe = equipe.filter((p) => p !== e);
-                localStorage.setItem("Equipe", JSON.stringify(equipe));
-
-                console.log(`${e} supprimé`);
-                setEquipes(equipe);
-                setMessage("");
-              }
-            }}
-          >
-            {e}
-          </li>
-        ))}
-      </ul>
-
-      <p>Compteur : {count}</p>
     </div>
   );
 }

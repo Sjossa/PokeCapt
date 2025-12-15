@@ -7,13 +7,16 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
     const id = Math.floor(Math.random() * (max - min + 1)) + 1;
 
     const pokemonRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
+    const speciesRes = await fetch(
+      `https://pokeapi.co/api/v2/pokemon-species/${id}`
+    );
 
     const pokemonJson = await pokemonRes.json();
     const speciesJson = await speciesRes.json();
 
     const fr = speciesJson.names.find(
-      (n: { name: string; language: { name: string } }) => n.language.name === "fr"
+      (n: { name: string; language: { name: string } }) =>
+        n.language.name === "fr"
     )?.name;
 
     const taucap = speciesJson.capture_rate;
@@ -23,16 +26,19 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
     );
 
     const typesFr = await Promise.all(
-      types.map(async (typeName:string) => {
+      types.map(async (typeName: string) => {
         const res = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
         const json = await res.json();
-        return json.names.find(
-          (n: { name: string; language: { name: string } }) => n.language.name === "fr"
-        )?.name ?? typeName; // fallback si pas trouvé
+        return (
+          json.names.find(
+            (n: { name: string; language: { name: string } }) =>
+              n.language.name === "fr"
+          )?.name ?? typeName
+        );
       })
     );
 
-    const isShiny = Math.floor(Math.random() * 512) === 0;
+    const isShiny = Math.floor(Math.random() * 1) === 0;
 
     const image = isShiny
       ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`
@@ -40,9 +46,7 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
 
     const song = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
 
-  
-
-
+    const trainer = `https://play.pokemonshowdown.com/sprites/trainers/red-gen1main.png`;
     return [
       {
         id,
@@ -52,6 +56,7 @@ export async function fetchPokemons(): Promise<fetchPokemonType[]> {
         song,
         taucap,
         type: typesFr,
+        trainer: trainer,
       },
     ];
   } catch (err) {

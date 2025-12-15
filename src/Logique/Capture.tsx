@@ -8,35 +8,34 @@ export default function useCapture(
   const [message, setMessage] = useState("");
 
   const capture = (percentage: number, name: string) => {
-    setCount((prev) => {
-      const savedEquipe = localStorage.getItem("Equipe");
-      const equipe = savedEquipe ? JSON.parse(savedEquipe) : [];
+    const savedEquipe = localStorage.getItem("Equipe");
+    const equipe: string[] = savedEquipe ? JSON.parse(savedEquipe) : [];
 
-      const random = Math.random() * 100;
-      const next = prev + 1;
+    if (equipe.length >= 6) {
+      setMessage(
+        "L'équipe est pleine. Supprimez un Pokémon avant de capturer."
+      );
+      return;
+    }
 
-      if (random < percentage) {
-        if (equipe.length >= 6) {
-          setMessage("Veuillez choisir un Pokémon à supprimer");
-        } else {
-          equipe.push(name);
-          localStorage.setItem("Equipe", JSON.stringify(equipe));
-          setMessage(`${name} capturé !`);
-          if (EquipeChange) EquipeChange(equipe);
+    const random = Math.random() * 100;
+    const next = count + 1;
+    setCount(next);
 
-          loadPokemons();
-        }
-        return 0;
-      }
-
-      if (random >= percentage && next === 3) {
-        setMessage("La capture a échoué !");
-        loadPokemons();
-        return 0;
-      }
-
-      return next;
-    });
+    if (random < percentage) {
+      equipe.push(name);
+      localStorage.setItem("Equipe", JSON.stringify(equipe));
+      EquipeChange?.(equipe);
+      setMessage(`${name} capturé !`);
+      setCount(0);
+      loadPokemons();
+      return;
+    }
+    if (random >= percentage && next >= 3) {
+      setMessage("La capture a échoué !");
+      setCount(0);
+      loadPokemons();
+    }
   };
 
   return { count, capture, message, setMessage };
