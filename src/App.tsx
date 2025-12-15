@@ -71,6 +71,7 @@ export default function App() {
                 ? "L'équipe est pleine. Supprimez un Pokémon avant de capturer."
                 : message}
             </p>
+            <p>{count}</p>
           </div>
         </div>
       ))}
