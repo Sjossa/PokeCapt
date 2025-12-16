@@ -26,13 +26,23 @@ export default function useCapture(
       equipe.push(name);
       localStorage.setItem("Equipe", JSON.stringify(equipe));
       EquipeChange?.(equipe);
-      setMessage(`${name} capturé !`);
+      new Notification("Nouvelle alerte PWA !", {
+        body: `Vous avez atrape ${name} capturé .`,
+        icon: "/icons/icon-192x192.png",
+        badge: "/icons/badge-72x72.png",
+        tag: "message-notification",
+      });
       setCount(0);
       loadPokemons();
       return;
     }
     if (random >= percentage && next >= 3) {
-      setMessage("La capture a échoué !");
+      new Notification("Nouvelle alerte PWA !", {
+        body: ` ${name} ses enfuie.`,
+        icon: "/icons/icon-192x192.png",
+        badge: "/icons/badge-72x72.png",
+        tag: "message-notification",
+      });
       setCount(0);
       loadPokemons();
     }

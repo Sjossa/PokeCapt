@@ -8,4 +8,5 @@ export default interface fetchPokemonType {
   taucap: number;
   type: string[];
   trainer: string;
+ cartes: { name: string; image: string ,id:number}[];
 }
