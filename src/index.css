@@ -494,11 +494,11 @@ display: flex;
   .pokemon::after {
 content: "";
   position: absolute;
-  bottom: -10px; /* distance sous le Pokémon */
-  left: 50%;      /* centre horizontal par rapport au parent */
+  bottom: -10px;
+  left: 50%;
   transform: translateX(-50%);
-  width: 90%;     /* largeur de l'ombre/sol */
-  height: 20%;    /* hauteur de l'ombre/sol, ajustable */
+  width: 90%;
+  height: 20%;
   /* background: url('./assets/a.png') no-repeat center/cover; */
   background: none;
   z-index: -1;

@@ -65,7 +65,7 @@ export default function App() {
         <div className="game-contenue" key={p.id}>
           <BattlePokemon
             pokemon={p}
-            disabled={equipes.length >= 6 || isCapturing}
+            disabled={ isCapturing}
             message={equipes.length >= 6 ? "L'équipe est pleine." : message}
             count={count}
             onCapture={() => {
