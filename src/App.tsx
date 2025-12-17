@@ -39,16 +39,18 @@ export default function App() {
   const captureWithCarte = (taux: number, name: string, carte: Carte) => {
     capture(taux, name);
 
-    if (!cartesCaptures.some((c) => c.id === carte.id)) {
-      setCartesCaptures([...cartesCaptures, carte]);
-    }
+    // Mise à jour sécurisée pour éviter conflit de re-render
+    setCartesCaptures((prev) => {
+      if (!prev.some((c) => c.id === carte.id)) {
+        return [...prev, carte];
+      }
+      return prev;
+    });
   };
 
   const toggleFavori = (name: string) => {
-    setFavoris(
-      favoris.includes(name)
-        ? favoris.filter((f) => f !== name)
-        : [...favoris, name]
+    setFavoris((prev) =>
+      prev.includes(name) ? prev.filter((f) => f !== name) : [...prev, name]
     );
   };
 
@@ -56,7 +58,16 @@ export default function App() {
     const name = equipes[index];
     if (favoris.includes(name)) return;
 
-    setEquipes(equipes.filter((_, i) => i !== index));
+    setEquipes((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCapture = (p: PokemonType) => {
+    if (isCapturing) return; // empêche double clic rapide
+    setIsCapturing(true);
+
+    captureWithCarte(p.taucap, p.nameFr, p.cartes[0]);
+
+    setIsCapturing(false);
   };
 
   return (
@@ -65,14 +76,10 @@ export default function App() {
         <div className="game-contenue" key={p.id}>
           <BattlePokemon
             pokemon={p}
-            disabled={ isCapturing}
+            disabled={isCapturing}
             message={equipes.length >= 6 ? "L'équipe est pleine." : message}
             count={count}
-            onCapture={() => {
-              setIsCapturing(true);
-              captureWithCarte(p.taucap, p.nameFr, p.cartes[0]);
-              setTimeout(() => setIsCapturing(false), 1000);
-            }}
+            onCapture={() => handleCapture(p)}
             onFlee={() => {
               loadPokemons();
               resetCount();
@@ -82,13 +89,10 @@ export default function App() {
             onRemove={removeFromEquipe}
             onToggleFavori={toggleFavori}
           />
-           <Modal cartesCaptures={cartesCaptures} />
-             <ThemeToggle />
+          <Modal cartesCaptures={cartesCaptures} />
+          <ThemeToggle />
         </div>
       ))}
-
-
-
     </div>
   );
 }
