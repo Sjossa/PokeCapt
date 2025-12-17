@@ -1,6 +1,7 @@
 import type PokemonType from "../types/pokemonType";
 import EquipeList from "../components/EquipeList";
 import { useEffect } from 'react';
+import { showNotification } from '../Hook/notification';
 
 
 type BattlePokemonProps = {
@@ -30,15 +31,14 @@ export default function BattlePokemon({
 
 }: BattlePokemonProps) {
     useEffect(() => {
-    if (message) {
-      new Notification("Nouvelle alerte PWA !", {
-        body: message,
-        icon: "/icons/icon-192x192.png",
-        badge: "/icons/badge-72x72.png",
-        tag: "message-notification",
-      });
-    }
-  }, [message]);
+  if (!message) return;
+
+  showNotification("Nouvelle alerte PWA !", {
+    body: message,
+    icon: "/icons/pwa-192x192.png",
+  });
+}, [message]);
+
 
   return (
     <div className="battle">
