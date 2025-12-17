@@ -24,7 +24,7 @@
 }
 
 [data-theme="light"] {
-  --bg: url(./assets/bg-2.gif);
+  --bg: url(./assets/bg-2_146.webp);
   --back:
     linear-gradient(rgba(255, 8, 8, 0.555), rgba(19, 243, 37, 0.6)),
     repeating-linear-gradient(
@@ -448,3 +448,168 @@ display: flex;
     bottom: 0;
     left: 550px;
 }
+
+@media (max-width: 767px) {
+  /* Jeu */
+  .game {
+    padding: 20px;
+    perspective: 800px;
+    display: flex;
+    flex-direction: column;
+    height: 100VH;
+  }
+
+  /* Info */
+  .info {
+    position: static;
+    margin-bottom: 12px;
+    width: fit-content;
+    transform: none;
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+  }
+
+  .info p:first-child {
+    font-size: 28px;
+  }
+
+  .info p:last-child {
+    font-size: 24px;
+  }
+
+  /* Pokémon */
+  .pokemon {
+    position: relative;
+    text-align: center;
+    margin: 0 auto 20px auto;
+  }
+
+  .pokemon img {
+    width: 300px;
+    transform: scale(1.5);
+  }
+
+  .pokemon::after {
+    bottom: -10px;
+    width: 300px;
+    height: 80px;
+  }
+
+  /* Équipes */
+  .equipes {
+    width: fit-content;
+    font-size: 14px;
+    position: fixed;
+
+
+
+  }
+
+  .equipes li {
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  /* Dresseur */
+  .dresseur {
+    position: relative;
+    flex-direction: column;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dresseur button {
+    min-width: 100px;
+    font-size: 14px;
+    height: 50px;
+    display: ;
+  }
+
+  .dresseur p {
+    width: 90%;
+    bottom: -50px;
+    font-size: 12px;
+    color: #000;
+  }
+
+  /* Battle */
+  .battle {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    padding: 10px;
+    height: 100%;
+  }
+
+  /* Modale */
+  .Modal-contenue {
+    width: 90%;
+    max-height: 90vh;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  /* Pokedex */
+  .pokedex {
+    padding: 10px;
+  }
+
+  .pokedex h1 {
+    font-size: 24px;
+  }
+
+  .pokedexcarte {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+
+  .pokedex-detail {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pokedex-detail img {
+    width: 200px;
+  }
+
+  .pokedex-info h2 {
+    font-size: 20px;
+  }
+
+  .pokedex-info p {
+    font-size: 14px;
+  }
+
+  .pokedex-info button {
+    margin-right: 20px;
+    padding: 8px 12px;
+  }
+
+  /* Bouton thème */
+  .theme {
+    top: 10px;
+    right: 10px;
+    left: auto;
+  }
+
+  .theme img {
+    width: 80px;
+  }
+
+  /* Bouton modale */
+  .modal-btn {
+    top: 0;
+    width: fit-content;
+    height: fit-content;
+    left: 30px;
+    transform: translateX(-50%);
+  }
+}
+
