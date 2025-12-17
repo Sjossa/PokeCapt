@@ -6,6 +6,8 @@ export default function useCapture(
 ) {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState("");
+  const resetCount = () => setCount(0);
+
 
   const capture = (percentage: number, name: string) => {
     const savedEquipe = localStorage.getItem("Equipe");
@@ -48,5 +50,5 @@ export default function useCapture(
     }
   };
 
-  return { count, capture, message, setMessage };
+  return { count, capture, message, setMessage ,resetCount};
 }
