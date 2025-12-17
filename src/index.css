@@ -11,20 +11,18 @@
 }
 
 [data-theme="dark"] {
-  --bg: url(./assets/bg-1.gif);
+  --bg: url("/assets/bg-1.gif");
   --back:
-  linear-gradient(rgba(90, 87, 87, 0.555), rgba(30, 30, 30, 0.6)),
-  repeating-linear-gradient(
-    90deg,
-    transparent 20px
-  ),
-  url('./assets/ng.png');
-
-
+    linear-gradient(rgba(90, 87, 87, 0.555), rgba(30, 30, 30, 0.6)),
+    repeating-linear-gradient(
+      90deg,
+      transparent 20px
+    ),
+    url("/assets/bg-2.webm");
 }
 
 [data-theme="light"] {
-  --bg: url(./assets/bg-2_146.webp);
+  --bg: url("/assets/bg-2_146.webp");
   --back:
     linear-gradient(rgba(255, 8, 8, 0.555), rgba(19, 243, 37, 0.6)),
     repeating-linear-gradient(

@@ -37,9 +37,11 @@ export default function App() {
     Notification.requestPermission();
   }, []);
 
-  // Capture et ajout de la carte
+ 
   const captureWithCarte = (taux: number, name: string, carte: Carte) => {
     capture(taux, name);
+
+    if (!carte) return;
 
     setCartesCaptures((prev) =>
       prev.some((c) => c.id === carte.id) ? prev : [...prev, carte]
