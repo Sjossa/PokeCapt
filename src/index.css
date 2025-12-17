@@ -447,7 +447,7 @@ display: flex;
     left: 550px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 900px) {
 
   .game {
     padding: 20px;
