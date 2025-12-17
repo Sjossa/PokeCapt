@@ -34,12 +34,26 @@ export default function App() {
 
   useEffect(() => {
     loadPokemons();
-   if ("Notification" in window && navigator.serviceWorker) {
-  Notification.requestPermission().then(permission => {
-    console.log("Permission notification:", permission);
-  });
-}
+    if ("Notification" in window && navigator.serviceWorker) {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.ready.then((registration) => {
+          console.log("Service Worker prêt");
 
+          if (Notification.permission === "granted") {
+            registration.showNotification("Salut Dresseur !", {
+              body: "Ton Pokémon est capturé !",
+              icon: "/icons/pwa-192x192.png",
+            });
+          }
+        });
+      }
+
+      if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission().then((permission) => {
+          console.log("Permission notification:", permission);
+        });
+      }
+    }
   }, []);
 
   const captureWithCarte = (taux: number, name: string, carte?: Carte) => {
