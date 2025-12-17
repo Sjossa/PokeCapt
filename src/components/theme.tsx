@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import dark from "../assets/darkrai.webp"
-import light from "../assets/ho-oh_lugia.webp"
+import dark from "../../public/assets/dark.webp"
+import light from "../../public/assets/ho-oh_lugia.webp"
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">(
