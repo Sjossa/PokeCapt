@@ -1,17 +1,14 @@
-import type PokemonType from "../types/pokemonType";
 import type { Carte } from "../types/carte";
+import type PokemonType from "../types/pokemonType";
 
 const CACHE_KEY = "pokemon-last-cache";
 
 export async function fetchPokemons(): Promise<PokemonType[]> {
-      if (!navigator.onLine) {
-  const cached = localStorage.getItem("pokemon-last-cache");
-  return cached ? JSON.parse(cached) : [];
-}
+  if (!navigator.onLine) {
+    const cached = localStorage.getItem("pokemon-last-cache");
+    return cached ? JSON.parse(cached) : [];
+  }
   try {
-
-
-
     const min = 1;
     const max = 151;
     const id = Math.floor(Math.random() * (max - min + 1)) + 1;
@@ -51,14 +48,11 @@ export async function fetchPokemons(): Promise<PokemonType[]> {
     const typesFr = await Promise.all(
       types.map(async (typeName: string) => {
         try {
-          const res = await fetch(
-            `https://pokeapi.co/api/v2/type/${typeName}`
-          );
+          const res = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
           const json = await res.json();
           return (
             json.names.find(
-              (n: { language: { name: string } }) =>
-                n.language.name === "fr"
+              (n: { language: { name: string } }) => n.language.name === "fr"
             )?.name ?? typeName
           );
         } catch {
@@ -70,8 +64,8 @@ export async function fetchPokemons(): Promise<PokemonType[]> {
     /* =========================
        CARTES TCG (BEST EFFORT)
        ========================= */
-  let cartes: Carte[] = [];
-let allCards: Carte[] = [];
+    let cartes: Carte[] = [];
+    let allCards: Carte[] = [];
 
     try {
       const sets = await Promise.all([
@@ -89,27 +83,24 @@ let allCards: Carte[] = [];
         ).then((r) => r.json()),
       ]);
 
-      allCards = sets.flatMap((s) => s.cards);
+      allCards = sets.flatMap((s) => s.cards ?? []);
 
-      const carte = allCards.find(
-        (card: { name: string }) => card.name === nameFr
+      const carte = allCards.find((card: { name: string }) =>
+        card.name.toLowerCase().includes(nameFr.toLowerCase())
       );
 
       if (carte) {
         cartes = [
           {
-            id: carte.id,
-            name: carte.name,
-            image: carte.image
+            id: carte?.id ?? "placeholder",
+            name: carte?.name ?? nameFr,
+            image: carte?.image
               ? `${carte.image}/low.webp`
               : "https://pokecardex.b-cdn.net/assets/images/sets/PRWC/HD/8.jpg",
           },
         ];
       }
-    } catch {
-
-    }
-
+    } catch {}
 
     const isShiny = Math.floor(Math.random() * 472) === 0;
 

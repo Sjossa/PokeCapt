@@ -37,24 +37,21 @@ export default function App() {
     Notification.requestPermission();
   }, []);
 
- 
-  const captureWithCarte = (taux: number, name: string, carte: Carte) => {
+  const captureWithCarte = (taux: number, name: string, carte?: Carte) => {
     capture(taux, name);
 
-    if (!carte) return;
+    if (!carte) return; 
 
     setCartesCaptures((prev) =>
       prev.some((c) => c.id === carte.id) ? prev : [...prev, carte]
     );
   };
 
-
   const toggleFavori = (name: string) => {
     setFavoris((prev) =>
       prev.includes(name) ? prev.filter((f) => f !== name) : [...prev, name]
     );
   };
-
 
   const removeFromEquipe = (index: number) => {
     const name = equipes[index];
@@ -63,13 +60,12 @@ export default function App() {
     setEquipes((prev) => prev.filter((_, i) => i !== index));
   };
 
-
   const handleCapture = (p: PokemonType) => {
     if (isCapturing) return;
     setIsCapturing(true);
 
-    captureWithCarte(p.taucap, p.nameFr, p.cartes[0]);
-
+    const carte = p.cartes?.[0];
+    captureWithCarte(p.taucap, p.nameFr, carte);
 
     setIsCapturing(false);
   };
@@ -81,7 +77,9 @@ export default function App() {
           <BattlePokemon
             pokemon={p}
             disabled={isCapturing}
-            message={equipes.length >= 6 ? "L'équipe est pleine." : message ?? ""}
+            message={
+              equipes.length >= 6 ? "L'équipe est pleine." : message ?? ""
+            }
             count={count}
             onCapture={() => handleCapture(p)}
             onFlee={() => {
