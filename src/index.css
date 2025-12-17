@@ -450,7 +450,7 @@ display: flex;
 }
 
 @media (max-width: 767px) {
-  /* Jeu */
+
   .game {
     padding: 20px;
     perspective: 800px;
@@ -459,7 +459,7 @@ display: flex;
     height: 100VH;
   }
 
-  /* Info */
+
   .info {
     position: static;
     margin-bottom: 12px;
@@ -479,22 +479,30 @@ display: flex;
     font-size: 24px;
   }
 
-  /* Pokémon */
+
   .pokemon {
     position: relative;
-    text-align: center;
-    margin: 0 auto 20px auto;
+    text-align: right;
   }
 
   .pokemon img {
-    width: 300px;
-    transform: scale(1.5);
+    width: 40vw;
+    height: 40vw;
+    transform: scale(1);
   }
 
   .pokemon::after {
-    bottom: -10px;
-    width: 300px;
-    height: 80px;
+content: "";
+  position: absolute;
+  bottom: -10px; /* distance sous le Pokémon */
+  left: 50%;      /* centre horizontal par rapport au parent */
+  transform: translateX(-50%);
+  width: 90%;     /* largeur de l'ombre/sol */
+  height: 20%;    /* hauteur de l'ombre/sol, ajustable */
+  /* background: url('./assets/a.png') no-repeat center/cover; */
+  background: none;
+  z-index: -1;
+
   }
 
   /* Équipes */
@@ -502,9 +510,8 @@ display: flex;
     width: fit-content;
     font-size: 14px;
     position: fixed;
-
-
-
+    bottom: 20px;
+    height: fit-content;
   }
 
   .equipes li {
@@ -529,7 +536,7 @@ display: flex;
     min-width: 100px;
     font-size: 14px;
     height: 50px;
-    display: ;
+
   }
 
   .dresseur p {
@@ -546,6 +553,7 @@ display: flex;
     border-radius: 12px;
     padding: 10px;
     height: 100%;
+
   }
 
   /* Modale */
