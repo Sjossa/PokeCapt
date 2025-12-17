@@ -13,12 +13,17 @@ export default function useCapture(
     const savedEquipe = localStorage.getItem("Equipe");
     const equipe: string[] = savedEquipe ? JSON.parse(savedEquipe) : [];
 
-    if (equipe.length >= 6) {
-      setMessage(
-        "L'équipe est pleine. Supprimez un Pokémon avant de capturer."
-      );
-      return;
-    }
+    if (equipe.length === 6) {
+  new Notification("Nouvelle alerte PWA !", {
+    body: "L'équipe est pleine. Supprimez un Pokémon avant de capturer.",
+    icon: "/icons/icon-192x192.png",
+    badge: "/icons/badge-72x72.png",
+    tag: "message-notification",
+  });
+
+  return;
+}
+
 
     const random = Math.random() * 100;
     const next = count + 1;

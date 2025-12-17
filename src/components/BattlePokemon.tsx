@@ -1,5 +1,6 @@
 import type PokemonType from "../types/pokemonType";
 import EquipeList from "../components/EquipeList";
+import { useEffect } from 'react';
 
 
 type BattlePokemonProps = {
@@ -28,6 +29,17 @@ export default function BattlePokemon({
   onToggleFavori,
 
 }: BattlePokemonProps) {
+    useEffect(() => {
+    if (message) {
+      new Notification("Nouvelle alerte PWA !", {
+        body: message,
+        icon: "/icons/icon-192x192.png",
+        badge: "/icons/badge-72x72.png",
+        tag: "message-notification",
+      });
+    }
+  }, [message]);
+
   return (
     <div className="battle">
       <div className="info">
@@ -49,9 +61,10 @@ export default function BattlePokemon({
           Lancer une Pokéball
         </button>
         <button onClick={onFlee}>Fuir</button>
-        <p>{message}</p>
+
         <p>{count}</p>
       </div>
+
 
       <EquipeList
         equipes={equipes}

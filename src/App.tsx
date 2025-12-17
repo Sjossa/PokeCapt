@@ -26,6 +26,7 @@ export default function App() {
 
   const [isCapturing, setIsCapturing] = useState(false);
 
+  // Chargement des pokémons
   async function loadPokemons() {
     const data = await fetchPokemons();
     setPokemons(data);
@@ -36,23 +37,22 @@ export default function App() {
     Notification.requestPermission();
   }, []);
 
+  // Capture et ajout de la carte
   const captureWithCarte = (taux: number, name: string, carte: Carte) => {
     capture(taux, name);
 
-    // Mise à jour sécurisée pour éviter conflit de re-render
-    setCartesCaptures((prev) => {
-      if (!prev.some((c) => c.id === carte.id)) {
-        return [...prev, carte];
-      }
-      return prev;
-    });
+    setCartesCaptures((prev) =>
+      prev.some((c) => c.id === carte.id) ? prev : [...prev, carte]
+    );
   };
+
 
   const toggleFavori = (name: string) => {
     setFavoris((prev) =>
       prev.includes(name) ? prev.filter((f) => f !== name) : [...prev, name]
     );
   };
+
 
   const removeFromEquipe = (index: number) => {
     const name = equipes[index];
@@ -61,11 +61,13 @@ export default function App() {
     setEquipes((prev) => prev.filter((_, i) => i !== index));
   };
 
+
   const handleCapture = (p: PokemonType) => {
-    if (isCapturing) return; // empêche double clic rapide
+    if (isCapturing) return;
     setIsCapturing(true);
 
     captureWithCarte(p.taucap, p.nameFr, p.cartes[0]);
+
 
     setIsCapturing(false);
   };
@@ -77,7 +79,7 @@ export default function App() {
           <BattlePokemon
             pokemon={p}
             disabled={isCapturing}
-            message={equipes.length >= 6 ? "L'équipe est pleine." : message}
+            message={equipes.length >= 6 ? "L'équipe est pleine." : message ?? ""}
             count={count}
             onCapture={() => handleCapture(p)}
             onFlee={() => {
