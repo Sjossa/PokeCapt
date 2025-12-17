@@ -34,13 +34,18 @@ export default function App() {
 
   useEffect(() => {
     loadPokemons();
-    Notification.requestPermission();
+   if ("Notification" in window && navigator.serviceWorker) {
+  Notification.requestPermission().then(permission => {
+    console.log("Permission notification:", permission);
+  });
+}
+
   }, []);
 
   const captureWithCarte = (taux: number, name: string, carte?: Carte) => {
     capture(taux, name);
 
-    if (!carte) return; 
+    if (!carte) return;
 
     setCartesCaptures((prev) =>
       prev.some((c) => c.id === carte.id) ? prev : [...prev, carte]
