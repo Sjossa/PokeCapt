@@ -1,5 +1,13 @@
 import { useState } from "react";
 
+async function showNotification(title: string, options?: NotificationOptions) {
+  if (!("serviceWorker" in navigator)) return;
+  if (Notification.permission !== "granted") return;
+
+  const registration = await navigator.serviceWorker.ready;
+  registration.showNotification(title, options);
+}
+
 export default function useCapture(
   loadPokemons: () => void,
   EquipeChange?: (nouvelleEquipe: string[]) => void
@@ -8,22 +16,17 @@ export default function useCapture(
   const [message, setMessage] = useState("");
   const resetCount = () => setCount(0);
 
-
-  const capture = (percentage: number, name: string) => {
+  const capture = async (percentage: number, name: string) => {
     const savedEquipe = localStorage.getItem("Equipe");
     const equipe: string[] = savedEquipe ? JSON.parse(savedEquipe) : [];
 
     if (equipe.length === 6) {
-  new Notification("Nouvelle alerte PWA !", {
-    body: "L'équipe est pleine. Supprimez un Pokémon avant de capturer.",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/badge-72x72.png",
-    tag: "message-notification",
-  });
-
-  return;
-}
-
+      await showNotification("Nouvelle alerte PWA !", {
+        body: "L'équipe est pleine. Supprimez un Pokémon avant de capturer.",
+        icon: "/icons/pwa-192x192.png",
+      });
+      return;
+    }
 
     const random = Math.random() * 100;
     const next = count + 1;
@@ -33,27 +36,27 @@ export default function useCapture(
       equipe.push(name);
       localStorage.setItem("Equipe", JSON.stringify(equipe));
       EquipeChange?.(equipe);
-      new Notification("Nouvelle alerte PWA !", {
-        body: `Vous avez atrape ${name} capturé .`,
-        icon: "/icons/icon-192x192.png",
-        badge: "/icons/badge-72x72.png",
-        tag: "message-notification",
+
+      await showNotification("Nouvelle alerte PWA !", {
+        body: `Vous avez attrapé ${name} !`,
+        icon: "/icons/pwa-192x192.png",
       });
+
       setCount(0);
       loadPokemons();
       return;
     }
-    if (random >= percentage && next >= 3) {
-      new Notification("Nouvelle alerte PWA !", {
-        body: ` ${name} ses enfuie.`,
-        icon: "/icons/icon-192x192.png",
-        badge: "/icons/badge-72x72.png",
-        tag: "message-notification",
+
+    if (next >= 3) {
+      await showNotification("Nouvelle alerte PWA !", {
+        body: `${name} s'est enfui.`,
+        icon: "/icons/pwa-192x192.png",
       });
+
       setCount(0);
       loadPokemons();
     }
   };
 
-  return { count, capture, message, setMessage ,resetCount};
+  return { count, capture, message, setMessage, resetCount };
 }
